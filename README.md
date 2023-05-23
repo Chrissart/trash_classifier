@@ -1,0 +1,1 @@
+# Clasificador de basura impulsado por visión artificial
