@@ -2,11 +2,10 @@
 
 """
 import streamlit
+from PIL import Image
 from streamlit_webrtc import webrtc_streamer
 from keras.models import load_model
 from keras.utils import plot_model
-import numpy
-import cv2
 
 from src.predict_image import predict_image
 
@@ -44,18 +43,15 @@ if view == "Modo Foto":
     if picture or photo:
         if picture:
             streamlit.image(picture, caption="Imagen capturada")
-            image_array = numpy.asarray(bytearray(picture.read()), dtype=numpy.uint8)
-            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
-            image = cv2.resize(image, (150, 150))
-
+            image = picture
         else:
             streamlit.image(photo, caption="Imagen cargada")
-            image = numpy.asarray(photo)
+            image = Image.open(photo)
 
-        proceso = streamlit.sidebar.button("Procesar!")
-        proceso = streamlit.button("Procesar!", use_container_width=True)
+        sidebar_process = streamlit.sidebar.button("Procesar!", use_container_width=True, key="sidebar_proceso")
+        proceso = streamlit.button("Procesar!", use_container_width=True, key="main_proceso")
 
-        if proceso:
+        if proceso or sidebar_process:
             streamlit.write("Procesando...")
             # Aquí deberías agregar el código para procesar la imagen con tu modelo predictivo
             predicted_class, confidence = predict_image(model, image)
