@@ -7,7 +7,7 @@ classes = {0: 'cardboard', 1: 'glass', 2: 'metal', 3: 'paper', 4: 'plastic', 5: 
 
 def predict_image(model, image, img_size=(150, 150)):
     # Load the image
-    img = load_img(image.file, target_size=img_size)
+    img = load_img(image, target_size=img_size)
     
     # Convert the image to a numpy array and scale the pixel values to the range [0,1]
     img_array = img_to_array(img) / 255.0
