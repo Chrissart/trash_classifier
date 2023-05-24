@@ -15,7 +15,12 @@ streamlit.set_page_config(
     page_icon="🗑️",
 )
 # # Carga el modelo desde el archivo
-model = load_model("./model/ResNet101V2_TrashClassifierV1.h5")
+@streamlit.cache(allow_output_mutation=True)
+def load_model_in_cache():
+  model=load_model('/content/my_model2.hdf5')
+  return model
+with streamlit.spinner('Cargando todo lo necesario..'):
+  model=load_model("./model/ResNet101V2_TrashClassifierV1.h5")
 
 # Contenido de la página
 streamlit.title("Trash Classifier 🗑️")
@@ -41,19 +46,22 @@ if view == "Modo Foto":
             )
     # # Verifica si se subió una imagen
     if picture or photo:
+        print("Picture ", type(picture))
+        print("Photo ", type(photo))
         if picture:
             streamlit.image(picture, caption="Imagen capturada")
             image = picture
         else:
+            print("Espero debuguees esto rápido :)", type(photo))
             streamlit.image(photo, caption="Imagen cargada")
-            image = Image.open(photo)
+            image = Image.open(photo).tobytes()
+            
 
         sidebar_process = streamlit.sidebar.button("Procesar!", use_container_width=True, key="sidebar_proceso")
         proceso = streamlit.button("Procesar!", use_container_width=True, key="main_proceso")
 
         if proceso or sidebar_process:
             streamlit.write("Procesando...")
-            # Aquí deberías agregar el código para procesar la imagen con tu modelo predictivo
             predicted_class, confidence = predict_image(model, image)
             if predicted_class:
                 streamlit.write(f"El residuo es: {predicted_class} con un {confidence*100:.2f}% de confianza.")
