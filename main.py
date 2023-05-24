@@ -7,7 +7,7 @@ from streamlit_webrtc import webrtc_streamer
 from keras.models import load_model
 from keras.utils import plot_model
 
-from src.predict_image import predict_image
+from src.predecir_imagen import predecir_imagen
 
 # Configuración de la página
 streamlit.set_page_config(
@@ -62,7 +62,7 @@ if view == "Modo Foto":
 
         if proceso or sidebar_process:
             streamlit.write("Procesando...")
-            predicted_class, confidence = predict_image(model, image)
+            predicted_class, confidence = predecir_imagen(model, image)
             if predicted_class:
                 streamlit.write(f"El residuo es: {predicted_class} con un {confidence*100:.2f}% de confianza.")
     else:
